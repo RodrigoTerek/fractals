@@ -1,94 +1,92 @@
+"use client";
+
 import Image from "next/image";
 import styles from "./page.module.css";
 
+import { useEffect, useRef, useState } from "react";
+import { colors } from "./colors";
+
 export default function Home() {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
+
+  useEffect(() => {
+    if (canvasRef.current) {
+      const ctx = canvasRef.current.getContext("2d");
+      setContext(ctx);
+
+      console.log(canvasRef);
+      console.log(ctx);
+
+      if (ctx) {
+        ctx.canvas.height = ctx.canvas.offsetHeight;
+        ctx.canvas.width = ctx.canvas.offsetWidth;
+        drawLines(ctx);
+      }
+    }
+  }, []);
+
+  const drawLines = (ctx: CanvasRenderingContext2D) => {
+    const height = ctx.canvas.height;
+    const width = ctx.canvas.width;
+
+    console.log({ height, width });
+
+    let x, y, iterations;
+    for (let i = 0; i < height; i++) {
+      for (let j = 0; j < width; j++) {
+        x = (j * 3) / width - 2;
+        y = (i * 3) / height - 1.5;
+
+        iterations = getIterations(x, y);
+        // console.log({ i, j, iterations });
+
+        drawRect(ctx, j, i, colors[iterations]);
+      }
+    }
+  };
+
+  const getIterations = (x: number, y: number): number => {
+    let i = 0;
+
+    let xAcc = 0;
+    let yAcc = 0;
+    let xTemp;
+
+    while (Math.pow(xAcc, 2) + Math.pow(yAcc, 2) <= 4 && i <= 1000) {
+      xTemp = Math.pow(xAcc, 2) - Math.pow(yAcc, 2) + x;
+      yAcc = 2 * xAcc * yAcc + y;
+      xAcc = xTemp;
+
+      i++;
+    }
+    // console.log({ x, y, t: Math.pow(xAcc, 2) + Math.pow(yAcc, 2), i });
+
+    return i;
+  };
+
+  const drawRect = (
+    ctx: CanvasRenderingContext2D,
+    x: number,
+    y: number,
+    color = "#000"
+  ) => {
+    ctx.fillStyle = color;
+    ctx.fillRect(x, y, 1, 1);
+  };
+
   return (
     <main className={styles.main}>
       <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
+        <p>Header</p>
       </div>
 
       <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
+        <canvas ref={canvasRef} />
       </div>
 
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+      <div>
+        <p>Pé</p>
       </div>
     </main>
   );
