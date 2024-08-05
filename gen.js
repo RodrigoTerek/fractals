@@ -39,8 +39,8 @@ function generateGradient(startColor, endColor, steps) {
   return gradient;
 }
 
-const startColor = "#FFFFFF"; // Black
-const endColor = "#000000"; // White
-const gradientArray = generateGradient(startColor, endColor, 1000);
+const startColor = "#FFFFFF"; // White
+const endColor = "#000000"; // Black
+const gradientArray = generateGradient(startColor, endColor, 256);
 
 console.log(gradientArray);
