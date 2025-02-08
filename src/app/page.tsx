@@ -13,24 +13,18 @@ const drawLines = (ctx: CanvasRenderingContext2D) => {
 
   console.log({ height, width });
 
-  let x,
-    y,
-    iterations,
-    result = [];
+  let x, y, iterations;
   for (let i = 0; i < height; i++) {
     for (let j = 0; j < width; j++) {
       x = (j * 3) / width - 2;
       y = (i * 3) / height - 1.5;
 
       iterations = getIterations(x, y);
-      result.push({ i, j, iterations });
 
       if (iterations >= MAX_ITERATIONS) drawRect(ctx, j, i, "#000");
       else drawRect(ctx, j, i, colors[iterations]);
     }
   }
-
-  console.log("Done", result);
 };
 
 const getIterations = (x: number, y: number): number => {
@@ -69,8 +63,8 @@ export default function Home() {
       const ctx = canvasRef.current.getContext("2d");
 
       if (ctx) {
-        ctx.canvas.height = ctx.canvas.offsetHeight * 10;
-        ctx.canvas.width = ctx.canvas.offsetWidth * 10;
+        ctx.canvas.height = ctx.canvas.offsetHeight;
+        ctx.canvas.width = ctx.canvas.offsetWidth;
         drawLines(ctx);
       }
     }
